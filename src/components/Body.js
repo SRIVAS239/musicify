@@ -1,6 +1,7 @@
 import {rest} from "../utils/mockData";
 import {useState} from "react";
 import AlbumCard from "./cards/AlbumCard";
+import CardContainer from "./layout/CardContainer";
 
 
 const Body = ()=>{
@@ -8,7 +9,8 @@ const Body = ()=>{
     const [restList, setRestList] = useState(rest);
 
     return <div className = "body-container">
-        <div className="search-container">
+        df<CardContainer/>
+        {/* <div className="search-container">
             Search
         </div>
         <button className="filter-btn" onClick = {() => {
@@ -20,7 +22,7 @@ const Body = ()=>{
         }}>Top Rated Restaurants</button>
         <div className = "flex flex-wrap">
             {restList.map((restCard, key)=><AlbumCard card = {restCard} key= {key}/>)}
-        </div>
+        </div> */}
     </div>
 }
 

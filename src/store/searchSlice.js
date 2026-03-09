@@ -1,3 +1,19 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { searchTracks } from "../services/search-service";
+
+// Async thunk for searching tracks, artists, and albums
+export const searchAll = createAsyncThunk(
+  "search/searchAll",
+  async ({ query, token }, { rejectWithValue }) => {
+    try {
+      const data = await searchTracks(query, token);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const searchSlice = createSlice({
   name: "search",
   initialState: {
@@ -8,16 +24,37 @@ const searchSlice = createSlice({
     loading: false,
     error: null,
   },
-  setQuery: (state, action) => {
-    state.query = action.payload;
+  reducers: {
+    setQuery: (state, action) => {
+      state.query = action.payload;
+    },
+    clearSearch: (state) => {
+      state.tracks = [];
+      state.artists = [];
+      state.albums = [];
+      state.error = null;
+    },
   },
-
-  clearSearch: (state) => {
-    state.tracks = [];
-    state.artists = [];
-    state.albums = [];
+  extraReducers: (builder) => {
+    builder
+      .addCase(searchAll.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchAll.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tracks = action.payload.tracks || [];
+        state.artists = action.payload.artists || [];
+        state.albums = action.payload.albums || [];
+      })
+      .addCase(searchAll.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "An error occurred";
+      });
   },
 });
 
 export const { setQuery, clearSearch } = searchSlice.actions;
+
+export default searchSlice.reducer;
 
