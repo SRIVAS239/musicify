@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+* {
+  cursor: default;
+}
+
+a, button {
+  cursor: pointer;
+}
+
+input, textarea {
+  cursor: text;
+}
