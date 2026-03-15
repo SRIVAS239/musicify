@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { searchTracks } from "../services/search-service";
 import { SearchState } from "../types/redux";
 import { SearchResponse } from "../types/spotify";
+import { getAppToken } from "../api/clientAccessToken";
 
 interface SearchAllParams {
   query: string;
-  token: string;
 }
 
 // Async thunk for searching tracks, artists, and albums
@@ -15,8 +15,10 @@ export const searchAll = createAsyncThunk<
   { rejectValue: string }
 >(
   "search/searchAll",
-  async ({ query, token }, { rejectWithValue }) => {
+  async ({ query }, { rejectWithValue }) => {
     try {
+      // Fetch token on-demand (cached internally)
+      const token = await getAppToken();
       const data = await searchTracks(query, token);
       return data;
     } catch (error) {

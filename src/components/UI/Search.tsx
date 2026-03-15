@@ -5,16 +5,11 @@ import { clearSearch } from "../../store/searchSlice";
 import SearchModal from "./SearchModal";
 import { RootState, AppDispatch } from "../../utils/appStore";
 
-const token =
-  "BQATKiGZ0ksbe2vogGL7ziPtOLz35sdzdzHyCeGhPn5WJwsotWhOn-qQLgs66SRwYbQ10BdMuzGhwpieI8VmswtCf1SkjGdldxggneLWwk-eabxJXSrV6v5GiFxw7JOZdrZeT3RZyH8";
-
 const Search: React.FC = () => {
   const [query, setQueryLocal] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error } = useSelector(
-    (state: RootState) => state.search
-  );
+  const { loading, error } = useSelector((state: RootState) => state.search);
 
   // Debounce search input
   useEffect(() => {
@@ -25,14 +20,14 @@ const Search: React.FC = () => {
         dispatch(clearSearch());
         return;
       }
-      dispatch(searchAll({ query, token }));
+      dispatch(searchAll({ query }));
     }, 300);
     return () => clearTimeout(timer);
   }, [query, dispatch]);
 
   const onSearch = () => {
     if (!query.trim()) return;
-    dispatch(searchAll({ query, token }));
+    dispatch(searchAll({ query }));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
