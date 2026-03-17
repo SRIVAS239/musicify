@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   console.log("Online status in Header:", onlineStatus);
 
   return (
-    <div className="header flex justify-between shadow-gray-100 shadow-lg h-16 mb-4 px-6 py-4">
+    <div className="header flex justify-between shadow-gray-100 shadow-lg h-16 px-6 py-4">
       <div className="logo">
         <div className="logo-img">
           <img className="w-5 h-5" src={LOGO_URL} alt="logo" />

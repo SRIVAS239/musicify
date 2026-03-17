@@ -21,7 +21,9 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ data: albumData }) => {
         </div>
       </div>
       <div className="p-4">
-        <Button text="Play" />
+        <Button variant="primary" size="md">
+          Play
+        </Button>
       </div>
     </div>
   );

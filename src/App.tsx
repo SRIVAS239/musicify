@@ -7,13 +7,14 @@ import Error from "./components/Error";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
+import AppContainer from "./components/layout/AppContainer"
 
 // const Grocery = lazy(() => import("./components/Grocery"));
 
 const AppLayout: React.FC = () => {
   return (
     <Provider store={appStore}>
-      <div className="app">
+      <div className="bg-surface min-h-screen" >
         <Header />
         {/* <Body/> */}
         <Outlet />
@@ -29,7 +30,7 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: "/",
-        Component: Body,
+        Component: AppContainer,
       },
       // {
       //     path:"/queue",

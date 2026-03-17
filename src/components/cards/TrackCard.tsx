@@ -16,7 +16,10 @@ const TrackCard: React.FC<TrackCardProps> = ({ data }) => {
       <div>{name}</div>
       <div>{(duration_ms / 60000).toFixed(2)} mins</div>
       <PlayButton />
-      <Button type="secondary" text="Add to queue" />
+      <Button variant="primary" size="md">
+        Add to queue
+      </Button>
+
     </div>
   );
 };

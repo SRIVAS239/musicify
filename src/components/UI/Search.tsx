@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { clearSearch } from "../../store/searchSlice";
 import SearchModal from "./SearchModal";
 import { RootState, AppDispatch } from "../../utils/appStore";
+import Button from "./Button";
 
 const Search: React.FC = () => {
   const [query, setQueryLocal] = useState<string>("");
@@ -49,13 +50,17 @@ const Search: React.FC = () => {
           disabled={loading}
         />
 
-        <button
+        <Button variant="primary" size="md" onClick={onSearch} disabled={loading}>
+          {loading ? "Searching..." : "Search"}
+        </Button>
+
+        {/* <button
           onClick={onSearch}
           disabled={loading}
           className="bg-blue-500 text-white px-4 py-1 rounded"
         >
           {loading ? "Searching..." : "Search"}
-        </button>
+        </button> */}
       </div>
 
       {error && <div className="text-red-500 mt-2">Error: {error}</div>}

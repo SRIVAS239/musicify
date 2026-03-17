@@ -1,0 +1,140 @@
+/* src/styles/tokens.css */
+@import "tailwindcss";
+
+@theme {
+  /* ── Brand palette — raw primitives, never used directly in components ── */
+    --color-brand-50:  #f3e8ff;
+    --color-brand-100: #e9d5ff;
+    --color-brand-400: #a855f7;   /* Purple — your primary */
+    --color-brand-500: #9333ea;
+    --color-brand-600: #6d28d9;
+
+  --color-neutral-0:   #ffffff;
+  --color-neutral-50:  #f8f8f8;
+  --color-neutral-100: #f0f0f0;
+  --color-neutral-200: #d4d4d4;
+  --color-neutral-400: #888888;
+  --color-neutral-600: #404040;
+  --color-neutral-800: #1e1e1e;
+  --color-neutral-900: #121212;
+  --color-neutral-950: #000000;
+
+  /* ── Semantic tokens — what components actually use ── */
+  /* These are the names you write in className="bg-surface text-fg-primary" */
+
+  /* Backgrounds */
+  --color-bg-base:     var(--color-neutral-950);
+  --color-bg-surface:  var(--color-neutral-900);
+  --color-bg-elevated: var(--color-neutral-800);
+  --color-bg-subtle:   var(--color-neutral-600);
+
+  /* Foreground / text */
+  --color-fg-primary:   var(--color-neutral-0);
+  --color-fg-secondary: var(--color-neutral-200);
+  --color-fg-muted:     var(--color-neutral-400);
+  --color-fg-disabled:  var(--color-neutral-600);
+
+  /* Brand / accent */
+  --color-accent:       var(--color-brand-400);
+  --color-accent-hover: #1ed760;   /* slightly brighter on hover */
+  --color-accent-fg:    var(--color-neutral-950);  /* text ON the accent bg */
+
+  /* Borders */
+  --color-border:        color-mix(in srgb, white 10%, transparent);
+  --color-border-strong: color-mix(in srgb, white 20%, transparent);
+
+  /* States */
+  --color-error:   #e53e3e;
+  --color-success: var(--color-brand-400);
+  --color-warning: #d97706;
+
+  /* ── Spacing scale ── */
+  --spacing-px:  1px;
+  --spacing-0:   0;
+  --spacing-1:   0.25rem;
+  --spacing-2:   0.5rem;
+  --spacing-3:   0.75rem;
+  --spacing-4:   1rem;
+  --spacing-5:   1.25rem;
+  --spacing-6:   1.5rem;
+  --spacing-8:   2rem;
+  --spacing-10:  2.5rem;
+  --spacing-12:  3rem;
+  --spacing-16:  4rem;
+  --spacing-20:  5rem;
+
+  /* ── Typography ── */
+  --font-sans: 'Circular Std', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+
+  --font-normal:   400;
+  --font-medium:   500;
+  --font-semibold: 600;
+  --font-bold:     700;
+
+  --leading-tight:  1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* ── Radius ── */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.375rem;
+  --radius-lg:   0.5rem;
+  --radius-xl:   0.75rem;
+  --radius-2xl:  1rem;
+  --radius-full: 9999px;   /* Spotify's pill shape */
+
+  /* ── Layout ── */
+  --spacing-player-height: 90px;
+  --spacing-sidebar-width: 240px;
+  --spacing-topbar-height: 64px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6);
+
+  /* ── Transitions ── */
+  --duration-fast:   100ms;
+  --duration-normal: 150ms;
+  --duration-slow:   300ms;
+  --ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Continuing in the same tokens.css file — add after @theme */
+
+/* Light mode overrides (if your app supports both) */
+/* Your app is dark-first (like Spotify), so light mode is the override */
+.light,
+[data-theme="light"] {
+  --color-bg-base:     var(--color-neutral-0);
+  --color-bg-surface:  var(--color-neutral-50);
+  --color-bg-elevated: var(--color-neutral-100);
+  --color-bg-subtle:   var(--color-neutral-200);
+
+  --color-fg-primary:   var(--color-neutral-950);
+  --color-fg-secondary: var(--color-neutral-800);
+  --color-fg-muted:     var(--color-neutral-600);
+  --color-fg-disabled:  var(--color-neutral-400);
+
+  --color-border:        color-mix(in srgb, black 10%, transparent);
+  --color-border-strong: color-mix(in srgb, black 20%, transparent);
+}
+
+/* System preference fallback — respects OS setting */
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    --color-bg-base:     var(--color-neutral-0);
+    --color-bg-surface:  var(--color-neutral-50);
+    /* ... same overrides as .light above */
+  }
+}
