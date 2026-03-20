@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html --dist-dir dist",
+    "lint":  "eslint src --ext .ts,.tsx --max-warnings 0",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,8 +16,13 @@
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "events": "^3.3.0",
     "os-browserify": "^0.3.0",
     "parcel": "^2.16.1",
