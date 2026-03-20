@@ -20,10 +20,7 @@ export default function Callback() {
     if (ranRef.current) return
     ranRef.current = true
 
-    handleCallback()
-  }, [])
-
-  async function handleCallback() {
+    async function handleCallback() {
     const params      = new URLSearchParams(window.location.search)
     const code        = params.get('code')
     const spotifyError = params.get('error')
@@ -101,6 +98,9 @@ export default function Callback() {
       )
     }
   }
+
+    handleCallback()
+  }, [navigate])
 
   if (status === 'error') {
     return (

@@ -7,6 +7,7 @@ import {
 } from '../store/playerSlice'
 import store from '../utils/appStore'
 import type { SpotifyTrack } from '../types/spotify'
+import type { SpotifyPlayer } from '../types/window'
 
 export function useSpotifyPlayer() {
   const dispatch    = useAppDispatch()
@@ -16,23 +17,14 @@ export function useSpotifyPlayer() {
   const volume      = useAppSelector(s => s.player.volume)
 
   // SDK player lives in a ref — never in state
-  const sdkPlayerRef = useRef<any>(null)
+  const sdkPlayerRef = useRef<SpotifyPlayer | null>(null)
   // Audio element for Free users and preview fallback
   const audioRef     = useRef<HTMLAudioElement | null>(null)
   // Progress interval ref
   const progressRef  = useRef<ReturnType<typeof setInterval> | null>(null)
 
   // ── Initialise for Premium users ─────────────────────────────
-  useEffect(() => {
-    if (!accessToken || !isPremium) {
-      dispatch(setIsPremiumMode(false))
-      return
-    }
-    dispatch(setIsPremiumMode(true))
-    initSDK()
-  }, [accessToken, isPremium])
-
-  function initSDK() {
+  const initSDK = useCallback(() => {
     // Prevent loading the script twice
     if (document.getElementById('spotify-sdk')) return
 
@@ -52,18 +44,18 @@ export function useSpotifyPlayer() {
         dispatch(setDeviceId(device_id))
       })
 
-      player.addListener('player_state_changed', (state: any) => {
+      player.addListener('player_state_changed', (state: { paused: boolean; position: number } | null) => {
         if (!state) return
         dispatch(setIsPlaying(!state.paused))
         dispatch(setProgress(state.position))
       })
 
-      player.addListener('initialization_error', ({ message }: any) => {
+      player.addListener('initialization_error', ({ message }: { message: string }) => {
         console.error('SDK init error:', message)
         dispatch(setIsPremiumMode(false))
       })
 
-      player.addListener('authentication_error', ({ message }: any) => {
+      player.addListener('authentication_error', ({ message }: { message: string }) => {
         console.error('SDK auth error:', message)
         dispatch(setIsPremiumMode(false))
       })
@@ -77,21 +69,56 @@ export function useSpotifyPlayer() {
     script.src    = 'https://sdk.scdn.co/spotify-player.js'
     script.async  = true
     document.body.appendChild(script)
-  }
+  }, [dispatch, volume])
+
+  useEffect(() => {
+    if (!accessToken || !isPremium) {
+      dispatch(setIsPremiumMode(false))
+      return
+    }
+    dispatch(setIsPremiumMode(true))
+    initSDK()
+  }, [accessToken, isPremium, dispatch, initSDK])
 
   // ── Progress ticker for preview audio ────────────────────────
-  function startProgressTicker() {
+  const startProgressTicker = useCallback(() => {
     if (progressRef.current) clearInterval(progressRef.current)
     progressRef.current = setInterval(() => {
       if (audioRef.current && !audioRef.current.paused) {
         dispatch(setProgress(Math.floor(audioRef.current.currentTime * 1000)))
       }
     }, 500)
-  }
+  }, [dispatch])
 
-  function stopProgressTicker() {
+  const stopProgressTicker = useCallback(() => {
     if (progressRef.current) clearInterval(progressRef.current)
-  }
+  }, [])
+
+  // ── playPreview helper ────────────────────────────────────────
+  const playPreview = useCallback((track: SpotifyTrack) => {
+    console.log('🎵 playPreview() called');
+    console.log('preview_url:', track.preview_url);
+    if (!track.preview_url) {
+      console.warn('No preview available for:', track.name)
+      dispatch(setIsPlaying(false))
+      return
+    }
+
+    // Create audio element once, reuse it for every preview
+    if (!audioRef.current) {
+      audioRef.current = new Audio()
+      audioRef.current.onended = () => {
+        dispatch(setIsPlaying(false))
+        stopProgressTicker()
+      }
+    }
+
+    audioRef.current.src    = track.preview_url
+    audioRef.current.volume = volume
+    audioRef.current.play()
+    dispatch(setIsPlaying(true))
+    startProgressTicker()
+  }, [volume, dispatch, startProgressTicker, stopProgressTicker])
 
   // ── play(track) ───────────────────────────────────────────────
   const play = useCallback(async (track: SpotifyTrack) => {
@@ -124,32 +151,7 @@ export function useSpotifyPlayer() {
       // Free path: play the 30-second preview URL
       playPreview(track)
     }
-  }, [isPremium, deviceId, accessToken])
-
-  function playPreview(track: SpotifyTrack) {
-    console.log('🎵 playPreview() called');
-    console.log('preview_url:', track.preview_url);
-    if (!track.preview_url) {
-      console.warn('No preview available for:', track.name)
-      dispatch(setIsPlaying(false))
-      return
-    }
-
-    // Create audio element once, reuse it for every preview
-    if (!audioRef.current) {
-      audioRef.current = new Audio()
-      audioRef.current.onended = () => {
-        dispatch(setIsPlaying(false))
-        stopProgressTicker()
-      }
-    }
-
-    audioRef.current.src    = track.preview_url
-    audioRef.current.volume = volume
-    audioRef.current.play()
-    dispatch(setIsPlaying(true))
-    startProgressTicker()
-  }
+  }, [isPremium, deviceId, accessToken, dispatch, playPreview])
 
   // ── pause() ───────────────────────────────────────────────────
   const pause = useCallback(async () => {
@@ -160,7 +162,7 @@ export function useSpotifyPlayer() {
       stopProgressTicker()
     }
     dispatch(setIsPlaying(false))
-  }, [isPremium])
+  }, [isPremium, dispatch, stopProgressTicker])
 
   // ── resume() ─────────────────────────────────────────────────
   const resume = useCallback(async () => {
@@ -171,7 +173,7 @@ export function useSpotifyPlayer() {
       startProgressTicker()
     }
     dispatch(setIsPlaying(true))
-  }, [isPremium])
+  }, [isPremium, dispatch, startProgressTicker])
 
   // ── seek(ms) ─────────────────────────────────────────────────
   const seek = useCallback(async (positionMs: number) => {
@@ -181,7 +183,7 @@ export function useSpotifyPlayer() {
       audioRef.current.currentTime = positionMs / 1000
     }
     dispatch(setProgress(positionMs))
-  }, [isPremium])
+  }, [isPremium, dispatch])
 
   // ── setVol(0-1) ───────────────────────────────────────────────
   const setVol = useCallback(async (v: number) => {
@@ -198,7 +200,7 @@ export function useSpotifyPlayer() {
       stopProgressTicker()
       audioRef.current?.pause()
     }
-  }, [])
+  }, [stopProgressTicker])
 
   return { play, pause, resume, seek, setVol }
 }

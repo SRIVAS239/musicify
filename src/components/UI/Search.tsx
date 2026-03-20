@@ -15,8 +15,8 @@ const Search: React.FC = () => {
   // Debounce search input
   useEffect(() => {
     console.log("Query changed:", query);
-    setShowModal(true);
     const timer = setTimeout(() => {
+      if (query) setShowModal(true);
       if (!query.trim()) {
         dispatch(clearSearch());
         return;

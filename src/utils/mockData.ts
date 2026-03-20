@@ -1,1 +1,1 @@
-export let rest: any[] = [];
+export const rest: unknown[] = [];
