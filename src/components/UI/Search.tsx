@@ -22,7 +22,7 @@ const Search: React.FC = () => {
         return;
       }
       dispatch(searchAll({ query }));
-    }, 300);
+    }, 500);
     return () => clearTimeout(timer);
   }, [query, dispatch]);
 
@@ -41,7 +41,7 @@ const Search: React.FC = () => {
     <>
       <div className="flex gap-2">
         <input
-          className="bg-gray-100 rounded-s w-96 h-8 p-2"
+          className="bg-bg-elevated rounded-s w-96 h-8 p-2"
           type="text"
           placeholder="Search songs, artists, albums..."
           value={query}
@@ -50,7 +50,7 @@ const Search: React.FC = () => {
           disabled={loading}
         />
 
-        <Button variant="primary" size="md" onClick={onSearch} disabled={loading}>
+        <Button variant="ghost" size="md" onClick={onSearch} disabled={loading}>
           {loading ? "Searching..." : "Search"}
         </Button>
 
@@ -65,7 +65,7 @@ const Search: React.FC = () => {
 
       {error && <div className="text-red-500 mt-2">Error: {error}</div>}
 
-      {showModal && <SearchModal />}
+      {showModal && query.trim() && <SearchModal />}
     </>
   );
 };

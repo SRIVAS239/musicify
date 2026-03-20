@@ -5,6 +5,8 @@ import { Link } from "react-router";
 import Search from "./UI/Search";
 import { useSelector } from "react-redux";
 import { RootState } from "../utils/appStore";
+import Button from "./UI/Button";
+import { initiateLogin } from "../services/auth-service";
 
 const Header: React.FC = () => {
   useEffect(() => {
@@ -18,7 +20,7 @@ const Header: React.FC = () => {
   console.log("Online status in Header:", onlineStatus);
 
   return (
-    <div className="header flex justify-between shadow-gray-100 shadow-lg h-16 px-6 py-4">
+    <div className="header flex justify-between bg-bg-surface shadow-lg h-16 px-6 py-4">
       <div className="logo">
         <div className="logo-img">
           <img className="w-5 h-5" src={LOGO_URL} alt="logo" />
@@ -38,6 +40,11 @@ const Header: React.FC = () => {
           </li>
           <li className="px-2">
             <Link to="/grocery">Grocery</Link>
+          </li>
+          <li className="px-2">
+            <Button variant="primary" size="md" onClick={initiateLogin}>
+              Login with spotify
+            </Button>
           </li>
         </ul>
       </div>

@@ -7,7 +7,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ data: albumData }) => {
   console.log("name", name);
 
   return (
-    <div className="m-6 border shadow-xs border-gray-200 rounded-lg w-[240px] hover:shadow-2xl hover:cursor-pointer transition-shadow duration-300">
+    <div className="m-6 shadow-xs rounded-lg w-[240px] hover:shadow-2xl hover:cursor-pointer transition-shadow duration-300 bg-bg-surface">
       <div className="">
         <img
           className="h-56 rounded-tr-lg rounded-tl-lg"

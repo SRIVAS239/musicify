@@ -16,17 +16,21 @@ const CardContainer: React.FC = () => {
       {cardData && cardData.length > 0 ? (
         <>
           <h2>Albums</h2>
-          {cardData.map((album, id: number) => {
-            return <AlbumCard data={album} key={id} />;
-          })}
+          <div className="flex flex-wrap gap-2">
+            {cardData.map((album, id: number) => {
+              return <AlbumCard data={album} key={id} />;
+            })}
+          </div>
         </>
       ) : null}
       {trackData && trackData.length > 0 ? (
         <>
           <h2>Tracks</h2>
-          {trackData.map((track, id: number) => {
-            return <TrackCard data={track} key={id} />;
-          })}
+          <div className="flex flex-wrap gap-2">
+            {trackData.map((track, id: number) => {
+              return <TrackCard data={track} key={id} />;
+            })}
+          </div>
         </>
       ) : null}
     </div>

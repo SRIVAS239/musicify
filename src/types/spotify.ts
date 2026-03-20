@@ -42,6 +42,7 @@ export interface SpotifyTrack {
   track_number: number;
   duration_ms: number;
   explicit: boolean;
+  preview_url: string | null; // 30-second MP3 — null for some tracks
   external_urls: {
     spotify: string;
   };
@@ -53,6 +54,15 @@ export interface SearchResponse {
   tracks: SpotifyTrack[];
   artists: SpotifyArtist[];
   albums: SpotifyAlbum[];
+}
+
+// Shape of Spotify's /search response
+export interface SpotifySearchResult {
+  tracks: {
+    items: SpotifyTrack[];
+    total: number;
+    next: string | null;
+  };
 }
 
 export interface TokenResponse {

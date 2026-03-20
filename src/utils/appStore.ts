@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import queueReducer from '../store/queueSlice';
 import searchReducer from '../store/searchSlice';
+import authReducer from '../store/authSlice';
+import  playerReducer from '../store/playerSlice';
 
 const appStore = configureStore({
   reducer: {
     queue: queueReducer,
-    search: searchReducer
+    search: searchReducer,
+    auth: authReducer,
+    player: playerReducer
   }
 });
 

@@ -18,3 +18,10 @@ export interface RootState {
   queue: QueueState;
   search: SearchState;
 }
+
+export interface AuthState{
+  accessToken: string | null;
+  expiresAt: number | null;
+  scope: string | null;
+  tokenType: string | null;
+}

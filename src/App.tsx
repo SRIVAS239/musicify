@@ -1,20 +1,21 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
-import Body from "./components/Body";
+
 import ContactUs from "./components/Contact";
 import Error from "./components/Error";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import AppContainer from "./components/layout/AppContainer"
+import Callback from "./pages/Callback";
 
 // const Grocery = lazy(() => import("./components/Grocery"));
 
 const AppLayout: React.FC = () => {
   return (
     <Provider store={appStore}>
-      <div className="bg-surface min-h-screen" >
+      <div className="bg-surface min-h-screen pb-24" >
         <Header />
         {/* <Body/> */}
         <Outlet />
@@ -32,6 +33,10 @@ const appRouter = createBrowserRouter([
         path: "/",
         Component: AppContainer,
       },
+      {
+        path:"/callback",
+        element: <Suspense fallback={<div>Loading...</div>}><Callback/></Suspense>
+      }
       // {
       //     path:"/queue",
       //     element: <Suspense fallback={<div>Loading...</div>}><Grocery/></Suspense>

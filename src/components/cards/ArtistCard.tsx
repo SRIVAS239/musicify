@@ -3,7 +3,7 @@ import { ArtistCardProps } from '../../types/components';
 
 const ArtistCard: React.FC<ArtistCardProps> = () => {
   return (
-    <div>ArtistCard</div>
+    <div >ArtistCard</div>
   );
 };
 
