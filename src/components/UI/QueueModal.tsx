@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../utils/appStore";
-import { removeFromQueue, clearQueue, setCurrentIndex } from "../../store/queueSlice";
+import { removeFromQueue, clearQueue, setCurrentIndex, shuffleQueue, unshuffleQueue } from "../../store/queueSlice";
 import { useSpotifyPlayer } from "../../hooks/useSpotifySDK";
 import Button from "./Button";
-import { FaTrash, FaTimes } from "react-icons/fa";
+import { FaTrash, FaTimes, FaRandom, FaSortNumericDown } from "react-icons/fa";
 
 interface QueueModalProps {
   onClose: () => void;
@@ -14,6 +14,7 @@ const QueueModal: React.FC<QueueModalProps> = ({ onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
   const queueItems = useSelector((state: RootState) => state.queue.items);
   const currentIndex = useSelector((state: RootState) => state.queue.currentIndex);
+  const isShuffled = useSelector((state: RootState) => state.queue.isShuffled);
   const { play } = useSpotifyPlayer();
 
   const handleRemoveTrack = (trackId: string) => {
@@ -29,12 +30,36 @@ const QueueModal: React.FC<QueueModalProps> = ({ onClose }) => {
     play(track);
   };
 
+  const handleShuffle = () => {
+    dispatch(shuffleQueue());
+  };
+
+  const handleUnshuffle = () => {
+    dispatch(unshuffleQueue());
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
       <div className="bg-bg-surface rounded-lg shadow-2xl w-full max-w-3xl max-h-[80vh] flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-gray-700">
-          <h2 className="text-2xl font-bold">Queue ({queueItems.length} songs)</h2>
+          <div className="flex items-center gap-4">
+            <h2 className="text-2xl font-bold">Queue ({queueItems.length} songs)</h2>
+            {queueItems.length > 1 && (
+              <button
+                onClick={isShuffled ? handleUnshuffle : handleShuffle}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full transition-colors ${
+                  isShuffled 
+                    ? 'bg-purple-500 text-white hover:bg-purple-600' 
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                }`}
+                title={isShuffled ? 'Unshuffle queue' : 'Shuffle queue'}
+              >
+                {isShuffled ? <FaSortNumericDown size={14} /> : <FaRandom size={14} />}
+                <span className="text-sm">{isShuffled ? 'Shuffled' : 'Shuffle'}</span>
+              </button>
+            )}
+          </div>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors"

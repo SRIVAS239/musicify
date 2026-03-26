@@ -4,6 +4,8 @@ import { SpotifyTrack, SpotifyArtist, SpotifyAlbum } from './spotify';
 export interface QueueState {
   items: SpotifyTrack[];
   currentIndex: number;
+  originalOrder: SpotifyTrack[];
+  isShuffled: boolean;
 }
 
 export interface SearchState {

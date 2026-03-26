@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../utils/appStore";
-import { nextTrack, previousTrack } from "../../store/queueSlice";
+import { nextTrack, previousTrack, shuffleQueue, unshuffleQueue } from "../../store/queueSlice";
 import { usePlayer } from "../../hooks/storeHooks";
 import { useSpotifyPlayer } from "../../hooks/useSpotifySDK";
-import { FaPlay, FaPause, FaVolumeUp, FaStepForward, FaStepBackward } from "react-icons/fa";
+import { FaPlay, FaPause, FaVolumeUp, FaStepForward, FaStepBackward, FaRandom } from "react-icons/fa";
 import { useEffect } from "react";
 
 function Player() {
@@ -12,6 +12,7 @@ function Player() {
   const { pause, resume, seek, setVol, play } = useSpotifyPlayer();
   const queueItems = useSelector((state: RootState) => state.queue.items);
   const currentIndex = useSelector((state: RootState) => state.queue.currentIndex);
+  const isShuffled = useSelector((state: RootState) => state.queue.isShuffled);
 
   console.log('Player render - currentTrack:', currentTrack?.name || 'none');
 
@@ -39,6 +40,14 @@ function Player() {
       if (prevTrackData) {
         play(prevTrackData);
       }
+    }
+  };
+
+  const handleToggleShuffle = () => {
+    if (isShuffled) {
+      dispatch(unshuffleQueue());
+    } else {
+      dispatch(shuffleQueue());
     }
   };
 
@@ -80,6 +89,16 @@ function Player() {
         {/* Centre: controls + progress bar */}
         <div className="flex flex-col items-center gap-2">
           <div className="flex items-center gap-4">
+            <button
+              onClick={handleToggleShuffle}
+              className={`transition-colors ${
+                isShuffled ? 'text-purple-400' : 'text-gray-400 hover:text-white'
+              }`}
+              title={isShuffled ? 'Unshuffle' : 'Shuffle'}
+            >
+              <FaRandom size={18} />
+            </button>
+
             <button
               onClick={handlePrevious}
               disabled={!hasPrevious}
