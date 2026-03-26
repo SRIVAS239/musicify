@@ -33,13 +33,7 @@ const Header: React.FC = () => {
       <div className="nav-items">
         <ul className="flex items-center space-x-3">
           <li className="px-2">
-            <Link to="/">Home</Link>
-          </li>
-          <li className="px-2">
             <Link to="/queue">Queue ({queueData.length} songs)</Link>
-          </li>
-          <li className="px-2">
-            <Link to="/grocery">Grocery</Link>
           </li>
           <li className="px-2">
             <Button variant="primary" size="md" onClick={initiateLogin}>

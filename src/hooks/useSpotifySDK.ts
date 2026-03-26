@@ -7,7 +7,6 @@ import {
 } from '../store/playerSlice'
 import store from '../utils/appStore'
 import type { SpotifyTrack } from '../types/spotify'
-import type { SpotifyPlayer } from '../types/window'
 
 export function useSpotifyPlayer() {
   const dispatch    = useAppDispatch()

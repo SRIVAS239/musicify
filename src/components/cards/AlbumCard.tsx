@@ -7,17 +7,17 @@ const AlbumCard: React.FC<AlbumCardProps> = ({ data: albumData }) => {
   console.log("name", name);
 
   return (
-    <div className="m-6 shadow-xs rounded-lg w-[240px] hover:shadow-2xl hover:cursor-pointer transition-shadow duration-300 bg-bg-surface">
+    <div className="shadow-xs rounded-lg w-[240px] hover:shadow-2xl hover:cursor-pointer transition-shadow duration-300 bg-bg-surface flex-shrink-0">
       <div className="">
         <img
-          className="h-56 rounded-tr-lg rounded-tl-lg"
+          className="h-56 w-full object-cover rounded-tr-lg rounded-tl-lg"
           src={images[0].url}
           alt={name}
         />
       </div>
       <div className=" p-4">
         <div className="resto-card-details-name">
-          <h2>{name}</h2>
+          <h2 className="truncate">{name}</h2>
         </div>
       </div>
       <div className="p-4">

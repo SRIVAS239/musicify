@@ -65,7 +65,7 @@ const Search: React.FC = () => {
 
       {error && <div className="text-red-500 mt-2">Error: {error}</div>}
 
-      {showModal && query.trim() && <SearchModal />}
+      {/* {showModal && query.trim() && <SearchModal />} */}
     </>
   );
 };

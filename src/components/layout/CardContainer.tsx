@@ -12,11 +12,11 @@ const CardContainer: React.FC = () => {
   console.log("CardContainer track data:", trackData);
 
   return (
-    <div>
+    <div className="p-6 overflow-hidden">
       {cardData && cardData.length > 0 ? (
         <>
-          <h2>Albums</h2>
-          <div className="flex flex-wrap gap-2">
+          <h2 className="text-2xl font-bold mb-4">Albums</h2>
+          <div className="flex flex-wrap gap-4 overflow-hidden">
             {cardData.map((album, id: number) => {
               return <AlbumCard data={album} key={id} />;
             })}
@@ -25,8 +25,8 @@ const CardContainer: React.FC = () => {
       ) : null}
       {trackData && trackData.length > 0 ? (
         <>
-          <h2>Tracks</h2>
-          <div className="flex flex-wrap gap-2">
+          <h2 className="text-2xl font-bold mb-4 mt-8">Tracks</h2>
+          <div className="flex flex-wrap gap-4 overflow-hidden">
             {trackData.map((track, id: number) => {
               return <TrackCard data={track} key={id} />;
             })}
