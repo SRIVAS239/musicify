@@ -1,7 +1,7 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../utils/appStore";
-import { addToQueue } from "../../store/queueSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../utils/appStore";
+import { addToQueue, setCurrentIndex } from "../../store/queueSlice";
 import Button from "../UI/Button";
 import PlayButton from "../UI/PlayButton";
 import { TrackCardProps } from "../../types/components";
@@ -13,6 +13,7 @@ const TrackCard: React.FC<TrackCardProps> = ({ data }) => {
   const { play, pause, resume } = useSpotifyPlayer();
   const { currentTrack, isPlaying } = usePlayer();
   const dispatch = useDispatch<AppDispatch>();
+  const queueItems = useSelector((state: RootState) => state.queue.items);
   
   const isCurrentTrack = currentTrack?.id === data.id;
 
@@ -27,6 +28,11 @@ const TrackCard: React.FC<TrackCardProps> = ({ data }) => {
       resume();
     } else {
       console.log('Playing new track');
+      // Check if track is in queue and set index
+      const trackIndex = queueItems.findIndex(track => track.id === data.id);
+      if (trackIndex !== -1) {
+        dispatch(setCurrentIndex(trackIndex));
+      }
       play(data);
     }
   };

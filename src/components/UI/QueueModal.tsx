@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../utils/appStore";
-import { removeFromQueue, clearQueue } from "../../store/queueSlice";
+import { removeFromQueue, clearQueue, setCurrentIndex } from "../../store/queueSlice";
 import { useSpotifyPlayer } from "../../hooks/useSpotifySDK";
 import Button from "./Button";
 import { FaTrash, FaTimes } from "react-icons/fa";
@@ -13,6 +13,7 @@ interface QueueModalProps {
 const QueueModal: React.FC<QueueModalProps> = ({ onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
   const queueItems = useSelector((state: RootState) => state.queue.items);
+  const currentIndex = useSelector((state: RootState) => state.queue.currentIndex);
   const { play } = useSpotifyPlayer();
 
   const handleRemoveTrack = (trackId: string) => {
@@ -23,7 +24,8 @@ const QueueModal: React.FC<QueueModalProps> = ({ onClose }) => {
     dispatch(clearQueue());
   };
 
-  const handlePlayTrack = (track: any) => {
+  const handlePlayTrack = (track: any, index: number) => {
+    dispatch(setCurrentIndex(index));
     play(track);
   };
 
@@ -53,7 +55,9 @@ const QueueModal: React.FC<QueueModalProps> = ({ onClose }) => {
               {queueItems.map((track, index) => (
                 <div
                   key={`${track.id}-${index}`}
-                  className="flex items-center gap-4 bg-bg-elevated p-3 rounded-lg hover:bg-bg-subtle transition-colors group"
+                  className={`flex items-center gap-4 bg-bg-elevated p-3 rounded-lg hover:bg-bg-subtle transition-colors group ${
+                    currentIndex === index ? 'border-2 border-purple-500' : ''
+                  }`}
                 >
                   <div className="text-gray-500 font-medium w-8 text-center">
                     {index + 1}
@@ -76,7 +80,7 @@ const QueueModal: React.FC<QueueModalProps> = ({ onClose }) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handlePlayTrack(track)}
+                      onClick={() => handlePlayTrack(track, index)}
                     >
                       Play
                     </Button>

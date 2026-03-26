@@ -1,12 +1,46 @@
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../utils/appStore";
+import { nextTrack, previousTrack } from "../../store/queueSlice";
 import { usePlayer } from "../../hooks/storeHooks";
 import { useSpotifyPlayer } from "../../hooks/useSpotifySDK";
-import { FaPlay, FaPause, FaVolumeUp } from "react-icons/fa";
+import { FaPlay, FaPause, FaVolumeUp, FaStepForward, FaStepBackward } from "react-icons/fa";
+import { useEffect } from "react";
 
 function Player() {
+  const dispatch = useDispatch<AppDispatch>();
   const { currentTrack, isPlaying, progressMs, durationMs, volume } = usePlayer();
-  const { pause, resume, seek, setVol } = useSpotifyPlayer();
+  const { pause, resume, seek, setVol, play } = useSpotifyPlayer();
+  const queueItems = useSelector((state: RootState) => state.queue.items);
+  const currentIndex = useSelector((state: RootState) => state.queue.currentIndex);
 
   console.log('Player render - currentTrack:', currentTrack?.name || 'none');
+
+  // Auto-play next track when current track ends
+  useEffect(() => {
+    if (currentTrack && progressMs >= durationMs - 500 && durationMs > 0) {
+      handleNext();
+    }
+  }, [progressMs, durationMs]);
+
+  const handleNext = () => {
+    if (currentIndex < queueItems.length - 1) {
+      dispatch(nextTrack());
+      const nextTrackData = queueItems[currentIndex + 1];
+      if (nextTrackData) {
+        play(nextTrackData);
+      }
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      dispatch(previousTrack());
+      const prevTrackData = queueItems[currentIndex - 1];
+      if (prevTrackData) {
+        play(prevTrackData);
+      }
+    }
+  };
 
   // Nothing playing — hide the bar entirely
   if (!currentTrack) return null;
@@ -19,6 +53,9 @@ function Player() {
     const seconds = totalSeconds % 60;
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
+
+  const hasNext = currentIndex < queueItems.length - 1;
+  const hasPrevious = currentIndex > 0;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-bg-elevated border-t border-gray-800 p-4 z-50">
@@ -40,14 +77,36 @@ function Player() {
           </div>
         </div>
 
-        {/* Centre: play/pause button + progress bar */}
+        {/* Centre: controls + progress bar */}
         <div className="flex flex-col items-center gap-2">
-          <button
-            onClick={() => isPlaying ? pause() : resume()}
-            className="w-10 h-10 rounded-full bg-purple-500 hover:bg-purple-600 flex items-center justify-center text-white transition-colors"
-          >
-            {isPlaying ? <FaPause /> : <FaPlay className="ml-0.5" />}
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handlePrevious}
+              disabled={!hasPrevious}
+              className={`text-white transition-colors ${
+                hasPrevious ? 'hover:text-purple-400' : 'opacity-30 cursor-not-allowed'
+              }`}
+            >
+              <FaStepBackward size={20} />
+            </button>
+            
+            <button
+              onClick={() => isPlaying ? pause() : resume()}
+              className="w-10 h-10 rounded-full bg-purple-500 hover:bg-purple-600 flex items-center justify-center text-white transition-colors"
+            >
+              {isPlaying ? <FaPause /> : <FaPlay className="ml-0.5" />}
+            </button>
+
+            <button
+              onClick={handleNext}
+              disabled={!hasNext}
+              className={`text-white transition-colors ${
+                hasNext ? 'hover:text-purple-400' : 'opacity-30 cursor-not-allowed'
+              }`}
+            >
+              <FaStepForward size={20} />
+            </button>
+          </div>
 
           <div className="flex items-center gap-2 w-full max-w-md">
             <span className="text-xs text-gray-400 min-w-8 text-right">
