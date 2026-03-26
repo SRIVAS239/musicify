@@ -2,7 +2,7 @@
 import { SpotifyTrack, SpotifyArtist, SpotifyAlbum } from './spotify';
 
 export interface QueueState {
-  items: string[];
+  items: SpotifyTrack[];
 }
 
 export interface SearchState {

@@ -1,4 +1,7 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../utils/appStore";
+import { addToQueue } from "../../store/queueSlice";
 import Button from "../UI/Button";
 import PlayButton from "../UI/PlayButton";
 import { TrackCardProps } from "../../types/components";
@@ -9,6 +12,7 @@ const TrackCard: React.FC<TrackCardProps> = ({ data }) => {
   const { name, album, artists, duration_ms } = data;
   const { play, pause, resume } = useSpotifyPlayer();
   const { currentTrack, isPlaying } = usePlayer();
+  const dispatch = useDispatch<AppDispatch>();
   
   const isCurrentTrack = currentTrack?.id === data.id;
 
@@ -27,6 +31,11 @@ const TrackCard: React.FC<TrackCardProps> = ({ data }) => {
     }
   };
 
+  const handleAddToQueue = () => {
+    dispatch(addToQueue(data));
+    console.log('Added to queue:', data.name);
+  };
+
   return (
     <div className="h-24 w-full flex bg-bg-surface rounded-lg p-4 items-center gap-4">
       <div>
@@ -40,7 +49,7 @@ const TrackCard: React.FC<TrackCardProps> = ({ data }) => {
       </div>
       <div className="text-sm text-gray-400">{(duration_ms / 60000).toFixed(2)} mins</div>
       <PlayButton onClick={handlePlayClick} />
-      <Button variant="primary" size="md">
+      <Button variant="primary" size="md" onClick={handleAddToQueue}>
         Add to queue
       </Button>
     </div>
