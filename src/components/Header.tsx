@@ -1,4 +1,3 @@
-import { LOGO_URL } from "../utils/constants";
 import { useEffect } from "react";
 import useDetectOnlineStatus from "../utils/useDetectOnlineStatus";
 import { Link } from "react-router";
@@ -22,8 +21,10 @@ const Header: React.FC = () => {
   return (
     <div className="header flex justify-between bg-bg-surface shadow-lg h-16 px-6 py-4">
       <div className="logo">
-        <div className="logo-img">
-          <img className="w-5 h-5" src={LOGO_URL} alt="logo" />
+        <div className="logo-text">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+            Musicify
+          </h1>
           {/* <StatusIndicator status={onlineStatus ? "online" : "offline"} /> */}
         </div>
       </div>
@@ -33,7 +34,9 @@ const Header: React.FC = () => {
       <div className="nav-items">
         <ul className="flex items-center space-x-3">
           <li className="px-2">
-            <Link to="/queue">Queue ({queueData.length} songs)</Link>
+            <Link to="/queue" className="text-white hover:text-purple-400 transition-colors">
+              Queue ({queueData.length} songs)
+            </Link>
           </li>
           <li className="px-2">
             <Button variant="primary" size="md" onClick={initiateLogin}>

@@ -3,7 +3,7 @@ import Player from '../MusicPlayer/Player'
 
 const AppContainer = () => {
   return (
-    <div className="app-container pb-24 overflow-x-hidden">
+    <div className="app-container overflow-x-hidden">
         <CardContainer />
         <Player />
     </div>

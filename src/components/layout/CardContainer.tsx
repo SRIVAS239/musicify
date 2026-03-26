@@ -12,7 +12,7 @@ const CardContainer: React.FC = () => {
   console.log("CardContainer track data:", trackData);
 
   return (
-    <div className="p-6 overflow-hidden">
+    <div className="p-6 pb-32 overflow-hidden">
       {cardData && cardData.length > 0 ? (
         <>
           <h2 className="text-2xl font-bold mb-4">Albums</h2>

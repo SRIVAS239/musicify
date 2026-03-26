@@ -15,7 +15,7 @@ import Callback from "./pages/Callback";
 const AppLayout: React.FC = () => {
   return (
     <Provider store={appStore}>
-      <div className="bg-surface min-h-screen pb-24" >
+      <div className="bg-bg-base min-h-screen" >
         <Header />
         {/* <Body/> */}
         <Outlet />
